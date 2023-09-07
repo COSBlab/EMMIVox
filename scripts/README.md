@@ -1,10 +1,10 @@
-# Python scripts for pre- and post-processing of EMMIVOX simulations
+# Python scripts for pre- and post-processing of EMMIVox simulations
 
-Here you will find some python scripts useful to setup and analyze EMMIVOX simulations. For info about their syntax, just type:
+Here you will find some python scripts useful to setup and analyze EMMIVox simulations. For info about their syntax, just type:
 
 `python script.py -h`
 
-Brief overview (incomplete):
+Brief overview:
  * `align-VOXELS.py`: align two PDBs based on an atom selections, dump the transformation to file, apply transformation to a cryo-EM map, write transformed cryo-EM map to file;
  * `align-PDBs.py`: transform one PDB based on the inverse transformation read from file;
  * `align-XTC.py`: transform a trajectory in XTC format based on the inverse transformation read from file;
@@ -15,11 +15,11 @@ Brief overview (incomplete):
 
 ## **Software installation**
 
-I would create a conda environment to install all the python libraries needed to run pre- and post-processing tools.
+You can create a conda environment to install all the python libraries needed to run pre- and post-processing tools.
 
-* `conda create --name cryo-emmi`
+* `conda create --name emmivox`
 
-* `conda activate cryo-emmi`
+* `conda activate emmivox`
 
 * `conda install -c conda-forge mrcfile mdanalysis biopython`
 
@@ -27,6 +27,6 @@ I would create a conda environment to install all the python libraries needed to
 
   `conda install -c simpleitk simpleitk`
 
-* You will also need pytorch for validating cryo-EM ensembles, not necessarily the same version as libtorch. You will find instructions [here](https://pytorch.org), the version probably depends on your Cuda installation. I have the most recent installed:
+* You will also need pytorch for validating cryo-EM ensembles, not necessarily the same version as libtorch. You will find instructions [here](https://pytorch.org), the version probably depends on your Cuda installation.
 
   `conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch`

@@ -138,7 +138,7 @@ We need to prepare the system with an energy minimization and equilibration at r
 
      `python align-PDBs.py conf_pbc.pdb conf_pbc_aligned.pdb ../1-Map-Preparation/transformation.dat`
 
-   * Finally, we add the BFactors column to our model:
+   * Finally, we add the BFactors column to our aligned model:
 
      `python add-BFACT.py conf_pbc_aligned.pdb EMMIStatus conf_phenix.pdb`
 

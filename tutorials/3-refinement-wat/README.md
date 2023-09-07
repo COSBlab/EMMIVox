@@ -1,8 +1,8 @@
-# Tutorial for single-structure refinement with EMMIVOX
-These are the steps for refining a single structural model into a cryo-EM maps with EMMIVOX.
+# Tutorial for single-structure refinement with EMMIVox
+These are the steps for refining a single structural model into a cryo-EM maps with EMMIVox.
 Each step of the procedure will be carried out in a separate directory.
 
-**Note**: All the python scripts are contained in [`scripts`](https://gitlab.pasteur.fr/mbonomi/cryo-em-emmi/-/tree/master/scripts).
+**Note**: all the python scripts are contained in [`scripts`](https://github.com/maxbonomi/EMMIVox/tree/main/scripts).
 
 ## 0. System setup
 
@@ -11,11 +11,12 @@ Each step of the procedure will be carried out in a separate directory.
       **Note**: The conformation in the `step3_input.gro` file (GROMACS format) produced by CHARMM-GUI is identical to one in the deposited PDB.
                 However, CHARMM-GUI will probably translate and rotate your initial PDB, which will then not fit the input cryo-EM map anymore. Furthermore, atoms order might be different.
 
-   * CHARMM-GUI renumbers residues and chains in `step3_input.gro`, so we first need to fix this:
+   * CHARMM-GUI renumbers residues and chains in `step3_input.gro`, so we first need to make sure we have a PDB file consistent with the `gro`
+     atom order. We can create this PDB file using this command:
 
      `bash renumber.sh step3_input.gro step3_input.pdb`
 
-   * Add the following custom groups to the index file created by CHARMM-GUI (`index.ndx`). You can create them with `make_ndx.py` in [`scripts`](https://gitlab.pasteur.fr/mbonomi/cryo-em-emmi/-/tree/master/scripts) using [MDAnalysis](https://www.mdanalysis.org) selection syntax:
+   * Add the following custom groups to the index file created by CHARMM-GUI (`index.ndx`). You can create them with `make_ndx.py` in [`scripts`](https://github.com/maxbonomi/EMMIVox/tree/main/scripts) using [MDAnalysis](https://www.mdanalysis.org) selection syntax:
 
        * `System-WAT`: the ordered waters (residues 380-455) and a water buffer of 3.5 Ang around them.
           Waters require a special treatment when building the `index.ndx` file, therefore we need to use the flag `--water`:
@@ -35,27 +36,21 @@ Each step of the procedure will be carried out in a separate directory.
  
          `python make_XTC_ndx.py System-MAP-H --ndx index.ndx`
 
-       **Note 1**: If you have a small molecule or other non-protein (and non-water) atoms that you want to include in the cryo-EM map restraint,
+       **Note**: If you have a small molecule or other non-protein (and non-water) atoms that you want to include in the cryo-EM map restraint,
                  please add them to the [MDAnalysis](https://www.mdanalysis.org) selections for the `System-PRO` and `System-MAP` groups.
-
-       **Note 2**: If you want to verify your selection for `System-MAP`, you can create a GROMACS conformation file with:
-
-       `gmx_mpi trjconv -f step3_input.gro -s step3_input.gro -o conf_map.gro -n index.ndx`
-  
-       and, when prompted, select the `System-MAP` group.
 
    **Working directory**: `0-Building`
 
 ## 1. Map preparation
 
-   * At this stage we need to download the cryo-EM full map [`emd_13223.map`](https://ftp.ebi.ac.uk/pub/databases/emdb/structures/EMD-13223/map/emd_13223.map.gz),
-     the two half-maps [`emd_13223_half_map_1.map`](https://ftp.ebi.ac.uk/pub/databases/emdb/structures/EMD-13223/other/emd_13223_half_map_1.map.gz)
-     and [`emd_13223_half_map_2.map`](https://ftp.ebi.ac.uk/pub/databases/emdb/structures/EMD-13223/other/emd_13223_half_map_2.map.gz), 
-     and the PDB [`7P6A.pdb`](https://files.rcsb.org/download/7P6A.pdb), which will be needed to zone the density map close to the model (optional, but speeds up things a lot). 
+   * At this stage we need to download the cryo-EM full map [`emd_13223.map`](https://ftp.wwpdb.org/pub/emdb/structures/EMD-13223/map/emd_13223.map.gz),
+     the two half-maps [`emd_13223_half_map_1.map`](https://ftp.wwpdb.org/pub/emdb/structures/EMD-13223/other/emd_13223_half_map_1.map.gz)
+     and [`emd_13223_half_map_2.map`](https://ftp.wwpdb.org/pub/emdb/structures/EMD-13223/other/emd_13223_half_map_2.map.gz),
+     and the PDB [`7P6A.pdb`](https://files.rcsb.org/download/7P6A.pdb), which will be needed to zone the density map close to the model (optional, but speeds up things a lot).
 
    * To convert the input cryo-EM map to PLUMED format, calculate an error map from the two half maps, and optionally filter voxels by correlation, you need to execute this:
 
-      `python cryo-EM_preprocess.py emd_13223.map 0.9 emd_plumed.dat --threshold 0.0 --zone 3.5 --zone_PDB 7P6A.pdb --halfmaps emd_13223_half_map_1.map emd_13223_half_map_2.map > log.preprocess` 
+      `python cryo-EM_preprocess.py emd_13223.map 0.9 emd_plumed.dat --zone 3.5 --zone_PDB 7P6A.pdb --zone_sel "protein" --halfmaps emd_13223_half_map_1.map emd_13223_half_map_2.map > log.preprocess`
 
        **Note 1**: The two half maps should be registered (aligned and with the same grid parameters). If they are not, you can use this command to register them:
 
@@ -63,7 +58,7 @@ Each step of the procedure will be carried out in a separate directory.
 
        `python map_registration.py emd.map emd_half_map_2.map`
 
-       **Note 2**: The value `0.9` is the cutoff to exclude correlated voxels (above this threshold). If you want to keep all the voxels of the input map, set this to `1.0`. `emd_plumed.dat` is the name of the output map in PLUMED format. `--threshold` selects only voxels with density strictly above a certain value. `--zone` can be used to keep only voxels within a certain distance (here 3.5 Ang) from the model specified by `--zone_PDB`. 
+       **Note 2**: The value `0.9` is the cutoff to exclude correlated voxels (above this threshold). If you want to keep all the voxels of the input map, set this to `1.0`. `emd_plumed.dat` is the name of the output map in PLUMED format. `--zone` can be used to keep only voxels within a certain distance (here 3.5 Ang) from the model specified by `--zone_PDB`.
 
        **Note 3**: If you want to give a look at the map after the preparation, you can inspect `emd_plumed.mrc`. This is the map that will be used in PLUMED for modelling and corresponds to `emd_plumed.dat`.
 
@@ -71,7 +66,7 @@ Each step of the procedure will be carried out in a separate directory.
 
       `python align-VOXELS.py ../0-Building/step3_input.pdb 7P6A.pdb emd_plumed_aligned.dat emd_plumed.dat --ref_sel "backbone" --mobile_sel "backbone and not altLoc B and not (name O and resid 379)"`
 
-       **Note 4**: Since there are some discrepancies between the number of atoms in the two PDBs, we have specified a selection of common atoms for alignment using [MDAnalysis](https://www.mdanalysis.org) selection syntax. `--ref_sel` refers to `step3_input.pdb` and `--mobile_sel` to `7P6A.pdb`. You can verify that the alignment is correct by checking the RMSD value in output: it should be zero as the two models are identical.
+       **Note 4**: Since there are some discrepancies between the number of atoms in the two PDBs, we have specified a selection of common atoms for alignment using [`MDAnalysis`](https://www.mdanalysis.org) selection syntax. `--ref_sel` refers to `step3_input.pdb` and `--mobile_sel` to `7P6A.pdb`. You can verify that the alignment is correct by checking the RMSD value in output: it should be zero as the two models are identical.
 
    **Working directory**: `1-Map-Preparation`
 
@@ -86,9 +81,9 @@ We need to prepare the system with an energy minimization and equilibration at r
      `gmx_mpi mdrun -pin on -deffnm em`
 
    * At this stage we store the energy-minimized conformation in a PDB file called `step3_input_xtc.pdb` with only the atoms in the 
-     group `System-XTC` (those saved in the GROMACS trajectory file). When prompted, select the correct group interactively:
+     group `System-XTC` (those saved in the GROMACS trajectory file).
 
-     `gmx_mpi trjconv -f em.gro -n ../0-Building/index.ndx -o ../3-Map-Scaling/step3_input_xtc.pdb -pbc nojump -s em.tpr`
+     `echo System-XTC | gmx_mpi trjconv -f em.gro -n ../0-Building/index.ndx -o ../3-Map-Scaling/step3_input_xtc.pdb -pbc nojump -s em.tpr`
 
    * We need to create additional restraints for the water molecules, which will be written to the `plumed_posres.dat` file. 
      These PLUMED restraints will keep the ordered waters in their positions as in `7P6A.pdb` (`--equil`) and the buffer within a radius of 8 Angstrom from a reference
@@ -114,9 +109,9 @@ We need to prepare the system with an energy minimization and equilibration at r
 
    We postprocess the NVT equilibration trajectory to obtain an optimal scaling factor between experimental and predicted map. 
    
-   `bash optimize_scale.sh 16`
+   `bash optimize_scale.sh 8`
 
-   Here we are using 16 CPU cores (and the GPU) to postprocess the trajectory with PLUMED. The optimal value of the scale will be printed in `BEST_SCALE` at the end of the optimization. This will be used for both single-structure refinement and ensemble modelling.
+   Here we are using 8 CPU cores (and the GPU) to postprocess the trajectory with PLUMED. The optimal value of the scale will be printed in `BEST_SCALE` at the end of the optimization. This will be used for both single-structure refinement and ensemble modelling.
 
    **Note**: If you have a monomeric protein or a heterocomplex, you need to edit `plumed_EMMI_template_BFACT.dat` before executing the `optimize_scale.sh` script
              and comment the line starting with `BFACT_NOCHAIN`. This option is used here since we are modelling 5 identical chains and 
@@ -138,12 +133,12 @@ We need to prepare the system with an energy minimization and equilibration at r
                we want the Bfactor of the same residue in different chains to be equal.
 
    * We need to create additional restraints for the water molecules, which will be different from the ones using during equilibration.
-     In production these PLUMED restraints will keep both ordered waters and the buffer within a radius of 8 Angstrom from a reference
+     In production, these PLUMED restraints will keep both ordered waters and the buffer within a radius of 8 Angstrom from a reference
      atom belonging to the protein backbone:
 
      `python add-POSRES.py ../3-Map-Scaling/step3_input_xtc.pdb "resid 380 to 455" 8.0 --ndx ../0-Building/index.ndx`
 
-   * Run a 10-ns long production run after setting the number of CPU cores to use (`$OMP_NUM_THREADS`):
+   * Run a 10-ns long production run following the instructions below, after setting the number of CPU cores to use (`$OMP_NUM_THREADS`).
 
      `gmx_mpi grompp -f 4-nvt-production.mdp -c ../2-Equilibration/nvt_posres.gro -n ../0-Building/index.ndx -p ../0-Building/topol.top -o production.tpr`
 
@@ -163,27 +158,27 @@ We need to prepare the system with an energy minimization and equilibration at r
                and comment the line starting with `BFACT_NOCHAIN`. This option is used here since we are modelling 5 identical chains and
                we want the Bfactor of the same residue in different chains to be equal. 
 
-   * Now we run energy minimization using 16 CPU cores:
+   * Now we run energy minimization using 8 CPU cores:
     
-     `bash run_PLUMED_emin.sh 16`
+     `bash run_PLUMED_emin.sh 8`
 
-     **Note**: When prompted, choose the `System-MAP` group interactively to select the atoms to be written in the output PDB file `conf_map.pdb`.
-
-   * After minimization is complete, we need to align `conf_map.pdb` to the original cryo-EM map using the `transformation.dat`
+   * After minimization is complete, we need to align `conf_pbc.pdb` to the original cryo-EM map using the `transformation.dat`
      file created during the map preparation stage:
 
-     `python align-PDBs.py conf_map.pdb conf_map_align.pdb ../1-Map-Preparation/transformation.dat`
+     `python align-PDBs.py conf_pbc.pdb conf_pbc_aligned.pdb ../1-Map-Preparation/transformation.dat`
 
-   * Finally, we add the BFactors column to our model:
+   * Finally, we add the BFactors column to our aligned model:
 
-     `python add-BFACT.py conf_map_align.pdb EMMIStatus conf_map_bfact.pdb`
+     `python add-BFACT.py conf_pbc_aligned.pdb EMMIStatus conf_phenix.pdb`
 
-     **Note**: If you want to exclude some atoms when creating `conf_map_bfact.pdb`, please specify them using the flag `--exclude`.
+   * The output PDB file `conf_phenix.pdb` is ready to be validated with PHENIX:
 
-   * The output PDB file `conf_map_bfact.pdb` is ready to be validated with PHENIX:
-
-     `bash do_PHENIX conf_map_bfact.pdb ../1-Map-Preparation/emd_13223.map 1.9 > results.PLUMED`
+     `bash do_PHENIX conf_phenix.pdb ../1-Map-Preparation/emd_13223.map 1.9 > results.PLUMED`
    
      where `1.9` is the resolution of the input map `emd_13223.map` in Angstrom. Validation metrics are saved in `results.PLUMED`.
+
+   * Compare the EMMIVOX-refined model with the deposited PDB:
+
+      `bash do_PHENIX ../1-Map-Preparation/7P6A.pdb ../1-Map-Preparation/emd_13223.map 1.9 > results.PDB`
 
    **Working directory**: `5-Analysis`

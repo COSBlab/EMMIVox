@@ -5,11 +5,11 @@ export PLUMED_NUM_THREADS=$1
 n=`grep NORM_DENSITY ../1-Map-Preparation/log.preprocess | awk '{print $NF}'`
 r=`grep Resolution ../1-Map-Preparation/log.preprocess | awk '{print $NF/10.0}'`
 
-# create a PDB file with only the XTC atoms: interactive selection!
-gmx_mpi trjconv -f ../2-Equilibration/em.gro -n ../0-Building/index.ndx -o step3_input_xtc.pdb -pbc nojump -s ../2-Equilibration/em.tpr
+# create a PDB file with only the XTC atoms
+echo System-XTC | gmx_mpi trjconv -f ../2-Equilibration/em.gro -n ../0-Building/index.ndx -o step3_input_xtc.pdb -pbc nojump -s ../2-Equilibration/em.tpr
 
 # loop over scale values
-for d in $(seq 0.5 0.05 2.0)
+for d in $(seq 0.7 0.05 1.3)
 do 
         # create directory and go into
 	mkdir s-${d}; cd s-${d}

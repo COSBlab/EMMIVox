@@ -11,7 +11,8 @@ Brief overview:
  * `map_registration.py`: align and resample a cryo-EM map on the grid of another cryo-EM map;
  * `cryo-EM_preprocess.py`: filter correlated voxels of a cryo-EM map, calculate error map from two half maps, zone the map close to the input model, write filtered map in PLUMED format to file;
  * `cryo-EM_validate.py`: calculate model/map fit (CCmask like) from one PDB, two PDBs, or two PDBs and a trajectory (average map);
- * `add-BFACT.py`: read a PDB file and a EMMIStatus file (with Bfactor) and create a new PDB file with Bfactor column.
+ * `add-BFACT.py`: read a PDB file and a EMMIStatus file (with Bfactor) and create a new PDB file with Bfactor column;
+ * `make_ndx.py` and `make_XTC_ndx.py`: create GROMACS index files with selection of atoms.
 
 ## **Software installation**
 
@@ -27,6 +28,9 @@ You can create a conda environment to install all the python libraries needed to
 
   `conda install -c simpleitk simpleitk`
 
-* You will also need pytorch for validating cryo-EM ensembles, not necessarily the same version as libtorch. You will find instructions [here](https://pytorch.org), the version probably depends on your Cuda installation.
+* In this environment, you also need to install `pytorch` using the instructions available [here](https://pytorch.org).
+  Make sure you select a version compatible with the Cuda version installed on your machine or alternatively the CPU version.
+  These instructions are for pytorch version 1.13.0 with Cuda 11.6:
 
-  `conda install pytorch torchvision torchaudio cudatoolkit=11.3 -c pytorch`
+  `conda install pytorch torchvision torchaudio pytorch-cuda=11.6 -c pytorch -c nvidia`
+

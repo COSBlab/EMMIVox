@@ -1,5 +1,5 @@
-# Tutorial for ensemble modelling with EMMIVOX
-These are the steps to do ensemble modelling using a cryo-EM map and EMMIVOX.
+# Tutorial for ensemble modelling with EMMIVox
+These are the steps to do ensemble modelling using a cryo-EM map and EMMIVox.
 Each step of the procedure will be carried out in a separate directory.
 
 **Note**: To do ensemble modelling you need to first complete the single-structure refinement tutorial.

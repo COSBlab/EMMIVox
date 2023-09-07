@@ -1,4 +1,4 @@
-# EMMIVOX tutorials
+# EMMIVox tutorials
 <p align="center">
   <img src="tau.png" width="400">
 </p>

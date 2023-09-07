@@ -16,10 +16,10 @@ Each step of the procedure will be carried out in a separate directory.
                and comment the line starting with `BFACT_NOCHAIN`. This option is used here since we are modelling 5 identical chains and
                we want the Bfactor of the same residue in different chains to be equal.
 
-   * Run the simulation in parallel on the cluster, using 16 MPI processes, each one parallelized on multiple CPU cores (`$OMP_NUM_THREADS`).
+   * Run a 10-ns long simulation in parallel using 16 MPI processes, each one parallelized on multiple CPU cores (`$OMP_NUM_THREADS`). 
      You might need to adapt this line depending on your command to submit parallel jobs, i.e. srun, mpiexec, or mpirun.
 
-     `srun -N 16 gmx_mpi mdrun -pin on -ntomp $OMP_NUM_THREADS -plumed plumed_EMMI.dat -s production.tpr -multidir rep-*`
+     `srun -N 16 gmx_mpi mdrun -pin on -ntomp $OMP_NUM_THREADS -plumed plumed_EMMI.dat -s production.tpr -multidir rep-* -nsteps 5000000`
 
      **Note**: Usually a good setup for multiple-replica simulations is to allocate 1 GPU to each replica, and 6-10 CPU cores (`$OMP_NUM_THREADS`) per replica depending on the system size. You can safely allocate (using your job manager, i.e. slurm or pbs) 2 replicas on the same GPU without significant loss in performance.  
 
@@ -31,8 +31,6 @@ Each step of the procedure will be carried out in a separate directory.
 
      `bash prepare_PLUMED_Ensemble_analysis.sh`
 
-     Note: When prompted, choose the `System-MAP` group interactively to select the map atoms to be written in the output PDB file `conf_map.pdb`.
-
    * Now we need to transform back the concatenated trajectory `traj-all-PBC.xtc` to fit the original cryo-EM map 
      using the `transformation.dat` created during the map preparation stage of single-structure refinement:
 
@@ -41,14 +39,14 @@ Each step of the procedure will be carried out in a separate directory.
    * We add a Bfactor column to the reference PDB (`conf_map.pdb`). These Bfactors are the
      same for all residues, they were set before doing ensemble modelling equal to the minimum Bfactor found in the single-structure refinement:
 
-     `python add-BFACT.py conf_map.pdb ../0-Production/EMMIStatus conf_map_bfact.pdb`
+     `python add-BFACT.py conf_map.pdb ../0-Production/EMMIStatus conf_phenix.pdb`
 
    * And finally we calculate model/map fit (Phenix CCmask-like) on the original PDB `7P6A.pdb` and on our ensemble:
 
-     `python cryo-EM_validate.py ../../1-refinement/1-Map-Preparation/emd_13223.map --pdbA=../../1-refinement/1-Map-Preparation/7P6A.pdb --pdbC=conf_map_bfact.pdb --trjC=traj-all-PBC-align.xtc --threshold=0.0`
+     `python cryo-EM_validate.py ../../1-refinement/1-Map-Preparation/emd_13223.map --pdbA=../../1-refinement/1-Map-Preparation/7P6A.pdb --pdbC=conf_phenix.pdb --trjC=traj-all-PBC-align.xtc --threshold=0.0`
 
      **Note**: if you performed energy minimization and validation after single-structure refinement, you can also add this model to the comparison:
 
-     `python cryo-EM_validate.py ../../1-refinement/1-Map-Preparation/emd_13223.map --pdbA=../../1-refinement/1-Map-Preparation/7P6A.pdb --pdbB=../../1-refinement/5-Analysis/conf_map_bfact.pdb --pdbC=conf_map_bfact.pdb --trjC=traj-all-PBC-align.xtc --threshold=0.0`
+     `python cryo-EM_validate.py ../../1-refinement/1-Map-Preparation/emd_13223.map --pdbA=../../1-refinement/1-Map-Preparation/7P6A.pdb --pdbB=../../1-refinement/5-Analysis/conf_phenix.pdb --pdbC=conf_phenix.pdb --trjC=traj-all-PBC-align.xtc --threshold=0.0`
 
 **Working directory**: `1-Analysis`

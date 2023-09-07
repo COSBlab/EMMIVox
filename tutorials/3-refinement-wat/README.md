@@ -150,7 +150,7 @@ We need to prepare the system with an energy minimization and equilibration at r
 
    **Note**: You do not need to perfom these actions if you are interested only in ensemble modelling.
     
-   * We first need to extract the conformation with best cryo-EM score from our production run and perform a short energy minimization. To setup all the files needed for minimization, you need to execute this script:
+   * We first need to extract the conformation with best EMMIVox score from our production run and perform a short energy minimization. To setup all the files needed for minimization, you need to execute this script:
      
      `bash prepare_PLUMED_input_emin.sh`
 

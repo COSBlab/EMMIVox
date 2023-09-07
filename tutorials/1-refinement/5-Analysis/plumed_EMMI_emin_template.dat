@@ -1,0 +1,44 @@
+# re-read EMMIStatus file
+RESTART
+# include topology info
+MOLINFO STRUCTURE=../3-Map-Scaling/step3_input_xtc.pdb WHOLE
+# define map atoms
+system-map: GROUP NDX_FILE=../0-Building/index.ndx NDX_GROUP=System-MAP
+# make map atoms whole 
+WHOLEMOLECULES ...
+ADDREFERENCE EMST
+ENTITY0=system-map
+... WHOLEMOLECULES
+
+# create EMMI score
+EMMIVOX ...
+# name of this action
+LABEL=emmi
+# general parameters - do not change this!
+# NL_STRIDE: update neighbor list stride
+# NL_DIST_CUTOFF: distance cutoff in nm
+# NL_GAUSS_CUTOFF: cutoff based on the Gaussian sigma
+TEMP=300.0 NL_STRIDE=1 NL_DIST_CUTOFF=1.0 NL_GAUSS_CUTOFF=3.0 
+# define atoms for cryo-EM restraint and read experimental data
+ATOMS=system-map DATA_FILE=../1-Map-Preparation/emd_plumed_aligned.dat
+# info about the experimental map
+NORM_DENSITY=NORM_DENSITY_ RESOLUTION=RESOLUTION_
+# data likelihood (or noise model): Marginal
+SIGMA_MIN=0.2 GPU
+# write output
+STATUS_FILE=EMMIStatus WRITE_STRIDE=1
+# comment this if you have a hetero-complex
+BFACT_NOCHAIN
+# for minimization, we accept only downhills moves with BFACT_MINIMIZE 
+DBFACT=0.1 MCBFACT_STRIDE=100 BFACT_SIGMA=0.1 BFACT_MINIMIZE
+# scale factor
+SCALE=SCALE_
+# correlation
+CORRELATION
+...
+
+# translate into bias - updated at every time step
+emr: BIASVALUE ARG=emmi.scoreb STRIDE=1
+
+# print output to file
+PRINT ARG=emmi.* FILE=COLVAR STRIDE=100

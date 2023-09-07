@@ -1,0 +1,37 @@
+# Make sure PHENIX is in your path 
+# read pdb
+pdb=$1
+# read map
+map=$2
+# read resolution
+res=$3
+
+## remove CRYST1 lines
+awk '{if($1!="CRYST1")print}' $pdb > tmp; mv tmp $pdb
+
+# 1) run Molprobity
+phenix.molprobity $pdb > log.MOLP
+# 2) correlation with the map
+phenix.model_map_cc $pdb $map resolution=$res > log.CC
+# 3) EMringer
+phenix.emringer $pdb $map > log.EMR
+# 4) Collect and print results
+echo "  dMAP   : " $res
+dmod=`awk 'BEGIN{fsc=0}{if($2<0.5 && fsc==0){print 1/$1; fsc=1}}' map_model_fsc.log`
+echo "  dmodel : " $dmod
+grep CC_box log.CC
+grep CC_mask log.CC
+#grep CC_volume log.CC
+#grep CC_peaks log.CC
+#cc_ave=`awk '{tot+=$4}END{print tot/NR}' cc_per_residue.log`
+#echo "  CC_ave   :" ${cc_ave}
+emr=`grep "EMRinger Score" log.EMR`
+echo " " $emr
+grep "RMS(bonds)"  log.MOLP
+grep "RMS(angles)" log.MOLP
+echo "Ramachandran plot (%)"
+grep -A3 Summary log.MOLP  | tail -n 2
+grep "Rotamer outliers" log.MOLP
+grep "C-beta deviations" log.MOLP
+grep Clashscore log.MOLP | grep -v "All-atom"
+grep "MolProbity score" log.MOLP

@@ -1,0 +1,12 @@
+# include topology info
+MOLINFO STRUCTURE=../../1-refinement/3-Map-Scaling/step3_input_xtc.pdb WHOLE
+# define map atoms
+system-map: GROUP NDX_FILE=../../1-refinement/0-Building/index.ndx NDX_GROUP=System-MAP
+# make it whole
+WHOLEMOLECULES ...
+ADDREFERENCE EMST
+ENTITY0=system-map
+... WHOLEMOLECULES
+
+# dump trajectory
+DUMPATOMS STRIDE=1 FILE=traj-all-PBC.xtc ATOMS=system-map

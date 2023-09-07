@@ -1,4 +1,4 @@
-#b Run energy minimization
+# Run energy minimization
 gmx_mpi grompp -f ../2-Equilibration/0-em-steep.mdp -c conf_best.gro -p ../0-Building/topol.top -o emin.tpr
 gmx_mpi mdrun -pin on -deffnm emin -ntomp $1 -plumed plumed_EMMI_emin.dat -c conf_best_emin.gro
 

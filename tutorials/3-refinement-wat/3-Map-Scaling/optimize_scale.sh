@@ -6,7 +6,7 @@ n=`grep NORM_DENSITY ../1-Map-Preparation/log.preprocess | awk '{print $NF}'`
 r=`grep Resolution ../1-Map-Preparation/log.preprocess | awk '{print $NF/10.0}'`
 
 # loop over scale values
-for d in $(seq 0.5 0.05 1.5)
+for d in $(seq 0.7 0.05 1.3)
 do 
         # create directory and go into
 	mkdir s-${d}; cd s-${d}

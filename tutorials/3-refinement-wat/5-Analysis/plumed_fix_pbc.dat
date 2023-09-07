@@ -1,6 +1,6 @@
 # include topology info
 MOLINFO STRUCTURE=../3-Map-Scaling/step3_input_xtc.pdb WHOLE
-# define xtc atoms
+# define all xtc atoms
 system-xtc: GROUP NDX_FILE=../0-Building/index.ndx NDX_GROUP=System-XTC
 # define protein atoms
 system-pro: GROUP NDX_FILE=../0-Building/index.ndx NDX_GROUP=System-PRO-H
@@ -12,4 +12,4 @@ wrap-ar: GROUP NDX_FILE=../2-Equilibration/index-wrap.ndx NDX_GROUP=Wrap-AROUND
 WRAPAROUND ATOMS=wrap-at AROUND=wrap-ar PAIR GROUPBY=3
 
 # dump gro file
-DUMPATOMS STRIDE=1 FILE=conf_map.gro ATOMS=system-xtc
+DUMPATOMS STRIDE=1 FILE=conf_pbc.gro ATOMS=system-xtc

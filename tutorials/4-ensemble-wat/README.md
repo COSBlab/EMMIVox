@@ -1,4 +1,4 @@
-# Tutorial for ensemble modelling with EMMIVox
+# Tutorial for ensemble refinement with EMMIVox
 These are the steps to do ensemble modelling using a cryo-EM map and EMMIVox.
 Each step of the procedure will be carried out in a separate directory.
 

@@ -1,7 +1,6 @@
-# Tutorial for single-structure refinement with EMMIVOX
-These are the steps for refining a single structural model into a cryo-EM maps with EMMIVOX.
+# Tutorial for single-structure refinement with EMMIVox
+These are the steps for refining a single structural model into a cryo-EM maps with EMMIVox.
 Each step of the procedure will be carried out in a separate directory.
-
 
 **Note**: all the python scripts are contained in [`scripts`](https://gitlab.pasteur.fr/mbonomi/cryo-em-emmi/-/tree/master/scripts).
 
@@ -12,17 +11,18 @@ Each step of the procedure will be carried out in a separate directory.
       **Note**: The conformation in the `step3_input.gro` file (GROMACS format) produced by CHARMM-GUI is identical to one in the deposited PDB.
                 However, CHARMM-GUI will probably translate and rotate your initial PDB, which will then not fit the input cryo-EM map anymore. Furthermore, atoms order might be different.
 
-   * CHARMM-GUI renumbers residues and chains in `step3_input.gro`, so we first need to fix this:
+   * CHARMM-GUI renumbers residues and chains in `step3_input.gro`, so we first need to make sure we have a PDB file consistent with the `gro`
+     atom order. We can create this PDB file using this command:
 
      `bash renumber.sh step3_input.gro step3_input.pdb`
 
    * Add to the index file created by CHARMM-GUI (`index.ndx`) two custom groups:
 
-     * `System-MAP`, which contains all the atoms that will be used to generate the cryo-EM map. You can do this with `make_ndx.py` in [`scripts`](https://gitlab.pasteur.fr/mbonomi/cryo-em-emmi/-/tree/master/scripts) using [`MDAnalysis`](https://www.mdanalysis.org) selection syntax. Hydrogen atoms and the carboxylate oxygens of glutamic/aspartic acid will be automatically removed from this group, as they are not used in PLUMED to calculate the cryo-EM map. A second group, called `System-MAP-H` will also be created to include these missing atoms (mostly to write them in the trajectory file).
+     * `System-MAP`, which contains all the atoms that will be used to generate the cryo-EM map. You can do this with `make_ndx.py` in [`scripts`](https://github.com/maxbonomi/EMMIVox/tree/main/scripts) using [`MDAnalysis`](https://www.mdanalysis.org) selection syntax. Hydrogen atoms and the carboxylate oxygens of glutamic/aspartic acid will be automatically removed from this group, as they are not used in PLUMED to calculate the cryo-EM map. A second group, called `System-MAP-H` will also be created to include these missing atoms (mostly to write them in the trajectory file).
 
         `python make_ndx.py step3_input.gro "protein" System-MAP --ndx index.ndx`
        
-        **Note**: if you have a small molecule or other non-protein (and non-water) atoms that you want to include in the cryo-EM map restraint, please add them to the MDAnalysis selection.
+        **Note**: if you have a small molecule or other non-protein (and non-water) atoms that you want to include in the EMMIVox restraint, please add them to the MDAnalysis selection.
 
      * `System-XTC`, which contains all the atoms that will be written to the GROMACS trajectory file (xtc format). In this case, we want to write all the atoms used for the cryo-EM calculation plus hydrogen and carboxylate oxygens of glutamic/aspartic acid.
  
@@ -32,10 +32,10 @@ Each step of the procedure will be carried out in a separate directory.
 
 ## 1. Map preparation
 
-   * At this stage we need to download the cryo-EM full map [`emd_13223.map`](https://ftp.ebi.ac.uk/pub/databases/emdb/structures/EMD-13223/map/emd_13223.map.gz),
-     the two half-maps [`emd_13223_half_map_1.map`](https://ftp.ebi.ac.uk/pub/databases/emdb/structures/EMD-13223/other/emd_13223_half_map_1.map.gz)
-     and [`emd_13223_half_map_2.map`](https://ftp.ebi.ac.uk/pub/databases/emdb/structures/EMD-13223/other/emd_13223_half_map_2.map.gz), 
-     and the PDB [`7P6A.pdb`](https://files.rcsb.org/download/7P6A.pdb), which will be needed to zone the density map close to the model (optional, but speeds up things a lot). 
+   * At this stage we need to download the cryo-EM full map [`emd_13223.map`](https://ftp.wwpdb.org/pub/emdb/structures/EMD-13223/map/emd_13223.map.gz),
+     the two half-maps [`emd_13223_half_map_1.map`](https://ftp.wwpdb.org/pub/emdb/structures/EMD-13223/other/emd_13223_half_map_1.map.gz)
+     and [`emd_13223_half_map_2.map`](https://ftp.wwpdb.org/pub/emdb/structures/EMD-13223/other/emd_13223_half_map_2.map.gz),
+     and the PDB [`7P6A.pdb`](https://files.rcsb.org/download/7P6A.pdb), which will be needed to zone the density map close to the model (optional, but speeds up things a lot).
 
    * To convert the input cryo-EM map to PLUMED format, calculate an error map from the two half maps, and optionally filter voxels by correlation, you need to execute this:
 

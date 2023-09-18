@@ -39,14 +39,14 @@ Each step of the procedure will be carried out in a separate directory.
    * We add a Bfactor column to the reference PDB (`conf_map.pdb`). These Bfactors are the
      same for all residues, they were set before doing ensemble modelling equal to the minimum Bfactor found in the single-structure refinement:
 
-     `python add-BFACT.py conf_map.pdb ../0-Production/EMMIStatus conf_phenix.pdb`
+     `python add-BFACT.py conf_map.pdb ../0-Production/EMMIStatus conf_EMMIVOX.pdb`
 
    * And finally we calculate model/map fit (Phenix CCmask-like) on the original PDB `7P6A.pdb` and on our ensemble:
 
-     `python cryo-EM_validate.py ../../3-refinement-wat/1-Map-Preparation/emd_13223.map --pdbA=../../3-refinement-wat/1-Map-Preparation/7P6A.pdb --pdbC=conf_phenix.pdb --trjC=traj-all-PBC-align.xtc --threshold=0.0`
+     `python cryo-EM_validate.py ../../3-refinement-wat/1-Map-Preparation/emd_13223.map --pdbA=../../3-refinement-wat/1-Map-Preparation/7P6A.pdb --pdbC=conf_EMMIVOX.pdb --trjC=traj-all-PBC-align.xtc --threshold=0.0`
 
      **Note**: if you performed energy minimization and validation after single-structure refinement, you can also add this model to the comparison:
 
-     `python cryo-EM_validate.py ../../3-refinement-wat/1-Map-Preparation/emd_13223.map --pdbA=../../3-refinement-wat/1-Map-Preparation/7P6A.pdb --pdbB=../../3-refinement-wat/5-Analysis/conf_phenix.pdb --pdbC=conf_phenix.pdb --trjC=traj-all-PBC-align.xtc --threshold=0.0`
+     `python cryo-EM_validate.py ../../3-refinement-wat/1-Map-Preparation/emd_13223.map --pdbA=../../3-refinement-wat/1-Map-Preparation/7P6A.pdb --pdbB=../../3-refinement-wat/5-Analysis/conf_EMMIVOX.pdb --pdbC=conf_EMMIVOX.pdb --trjC=traj-all-PBC-align.xtc --threshold=0.0`
 
 **Working directory**: `1-Analysis`

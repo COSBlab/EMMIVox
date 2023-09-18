@@ -169,11 +169,11 @@ We need to prepare the system with an energy minimization and equilibration at r
 
    * Finally, we add the BFactors column to our aligned model:
 
-     `python add-BFACT.py conf_pbc_aligned.pdb EMMIStatus conf_phenix.pdb`
+     `python add-BFACT.py conf_pbc_aligned.pdb EMMIStatus conf_EMMIVOX.pdb`
 
-   * The output PDB file `conf_phenix.pdb` is ready to be validated with PHENIX:
+   * The output PDB file `conf_EMMIVOX.pdb` is ready to be validated with PHENIX:
 
-     `bash do_PHENIX conf_phenix.pdb ../1-Map-Preparation/emd_13223.map 1.9 > results.PLUMED`
+     `bash do_PHENIX conf_EMMIVOX.pdb ../1-Map-Preparation/emd_13223.map 1.9 > results.PLUMED`
    
      where `1.9` is the resolution of the input map `emd_13223.map` in Angstrom. Validation metrics are saved in `results.PLUMED`.
 

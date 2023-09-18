@@ -144,9 +144,9 @@ We need to prepare the system with an energy minimization and equilibration at r
 
    * The output PDB file `conf_EMMIVOX.pdb` is ready to be validated with PHENIX:
 
-     `bash do_PHENIX conf_EMMIVOX.pdb ../1-Map-Preparation/emd_13223.map 1.9 > results.PLUMED`
+     `bash do_PHENIX conf_EMMIVOX.pdb ../1-Map-Preparation/emd_13223.map 1.9 > results.EMMIVOX`
    
-     where `1.9` is the resolution of the input map `emd_13223.map` in Angstrom. Validation metrics are saved in `results.PLUMED`.
+     where `1.9` is the resolution of the input map `emd_13223.map` in Angstrom. Validation metrics are saved in `results.EMMIVOX`.
 
    * Compare the EMMIVOX-refined model with the deposited PDB:
 

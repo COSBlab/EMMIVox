@@ -71,7 +71,7 @@ A_["S"]=np.array([0.2497, 0.5628, 1.3899, 2.1865, 0.7715])
 A_["P"]=np.array([0.2548, 0.6106, 1.4541, 2.3204, 0.8477])
 A_["F"]=np.array([0.1083, 0.3175, 0.6487, 0.5846, 0.1421])
 ## create a string of supported atoms for MDAnalysis selection
-selt_="not resname WAT and type "
+selt_="type "
 for key in B_:
     selt_ += key + " "
 ## the Gaussian in density (real) space is the FT of scattering factor

@@ -1,7 +1,7 @@
 # include topology info
 MOLINFO STRUCTURE=../../1-refinement/3-Map-Scaling/step3_input_xtc.pdb WHOLE
 # define map atoms
-system-map: GROUP NDX_FILE=../../1-refinement/0-Building/index.ndx NDX_GROUP=System-MAP
+system-map: GROUP NDX_FILE=../../1-refinement/0-Building/index.ndx NDX_GROUP=System-MAP-H
 # make it whole
 WHOLEMOLECULES ...
 ADDREFERENCE EMST

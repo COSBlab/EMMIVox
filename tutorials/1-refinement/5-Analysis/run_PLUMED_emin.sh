@@ -6,4 +6,4 @@ gmx_mpi mdrun -pin on -deffnm emin -ntomp $1 -plumed plumed_EMMI_emin.dat -c con
 plumed driver --plumed plumed_fix_pbc.dat --igro conf_best_emin.gro
 
 # Now we convert conf_pbc.gro to conf_pbc.pdb. This file will contain only the heavy atoms used to generate the cryo-em map.
-echo System-MAP | gmx_mpi trjconv -f conf_pbc.gro -s emin.tpr -n ../0-Building/index.ndx -o conf_pbc.pdb
+echo System-MAP-H | gmx_mpi trjconv -f conf_pbc.gro -s emin.tpr -n ../0-Building/index.ndx -o conf_pbc.pdb

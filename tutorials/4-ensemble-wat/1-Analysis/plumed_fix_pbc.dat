@@ -1,15 +1,15 @@
 # include topology info
 MOLINFO STRUCTURE=../../3-refinement-wat/3-Map-Scaling/step3_input_xtc.pdb WHOLE
 # define map atoms
-system-map: GROUP NDX_FILE=../../3-refinement-wat/0-Building/index.ndx NDX_GROUP=System-MAP
+system-map: GROUP NDX_FILE=../../3-refinement-wat/0-Building/index.ndx NDX_GROUP=System-MAP-H
 # define protein atoms
-system-pro: GROUP NDX_FILE=../../3-refinement-wat/0-Building/index.ndx NDX_GROUP=System-PRO
+system-pro: GROUP NDX_FILE=../../3-refinement-wat/0-Building/index.ndx NDX_GROUP=System-PRO-H
 # make protein whole
 WHOLEMOLECULES ADDREFERENCE EMST ENTITY0=system-pro
 # Wrap water around protein
-wrap-at: GROUP NDX_FILE=../../3-refinement-wat/2-Equilibration/index-wrap.ndx NDX_GROUP=Wrap-ATOMS
+wrap-at: GROUP NDX_FILE=../../3-refinement-wat/2-Equilibration/index-wrap.ndx NDX_GROUP=Wrap-ATOMS-H
 wrap-ar: GROUP NDX_FILE=../../3-refinement-wat/2-Equilibration/index-wrap.ndx NDX_GROUP=Wrap-AROUND
-WRAPAROUND ATOMS=wrap-at AROUND=wrap-ar PAIR
+WRAPAROUND ATOMS=wrap-at AROUND=wrap-ar PAIR GROUPBY=3
 
 # dump trajectory
 DUMPATOMS STRIDE=1 FILE=traj-all-PBC.xtc ATOMS=system-map

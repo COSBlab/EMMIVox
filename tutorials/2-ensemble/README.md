@@ -41,12 +41,12 @@ Each step of the procedure will be carried out in a separate directory.
 
      `python add-BFACT.py conf_map.pdb ../0-Production/EMMIStatus conf_EMMIVOX.pdb`
 
-   * And finally we calculate model/map fit (Phenix CCmask-like) on the original PDB `7P6A.pdb` and on our ensemble:
+   * And finally we calculate model fit to the data (CC_mask) of the original PDB `7P6A.pdb` and of our ensemble:
 
      `python cryo-EM_validate.py ../../1-refinement/1-Map-Preparation/emd_13223.map --pdbA=../../1-refinement/1-Map-Preparation/7P6A.pdb --pdbC=conf_EMMIVOX.pdb --trjC=traj-all-PBC-align.xtc --threshold=0.0`
 
-     **Note**: if you performed energy minimization and validation after single-structure refinement, you can also add this model to the comparison:
+     **Note**: if you performed energy minimization and validation after single-structure refinement, you can compare also with the EMMIVOX model:
 
-     `python cryo-EM_validate.py ../../1-refinement/1-Map-Preparation/emd_13223.map --pdbA=../../1-refinement/1-Map-Preparation/7P6A.pdb --pdbB=../../1-refinement/5-Analysis/conf_EMMIVOX.pdb --pdbC=conf_EMMIVOX.pdb --trjC=traj-all-PBC-align.xtc --threshold=0.0`
+     `python cryo-EM_validate.py ../../1-refinement/1-Map-Preparation/emd_13223.map --pdbA=../../1-refinement/5-Analysis/conf_EMMIVOX.pdb --pdbC=conf_EMMIVOX.pdb --trjC=traj-all-PBC-align.xtc --threshold=0.0`
 
 **Working directory**: `1-Analysis`

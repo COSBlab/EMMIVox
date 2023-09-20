@@ -181,4 +181,11 @@ We need to prepare the system with an energy minimization and equilibration at r
 
       `bash do_PHENIX ../1-Map-Preparation/7P6A.pdb ../1-Map-Preparation/emd_13223.map 1.9 > results.PDB`
 
+   * Model fit to the data (CC_mask) can be calculated using our internal script:
+
+      `python cryo-EM_validate.py ../1-Map-Preparation/emd_13223.map --pdbA=conf_EMMIVOX.pdb --threshold=0.0 > CCmask.EMMIVOX`
+
+      `python cryo-EM_validate.py ../1-Map-Preparation/emd_13223.map --pdbA=../1-Map-Preparation/7P6A.pdb --threshold=0.0 > CCmask.PDB`
+
+
    **Working directory**: `5-Analysis`

@@ -14,7 +14,7 @@ This repository is organized in the following two directories:
 
  Make sure you have installed:
 
- * A modern C++ compiler that supports OpenMP parallelization and C++14.
+ * A modern C++ compiler that supports OpenMP parallelization and C++17.
  * MPI library/compilers for multi-replica ensemble simulations.
  * Cuda, needed by both GROMACS and PLUMED. The exact version depends a bit on how old your GPUs are.
  * [LibTorch](https://pytorch.org/get-started/locally/). Make sure you download the C++ version (LibTorch, not pytorch) that is supported by the Cuda version you installed; 

@@ -3,7 +3,7 @@
 Here you can find scripts and tutorials to perform single-structure model and ensemble refinement
 using cryo-EM maps and the EMMIVox approach introduced in:
 
-S. Hoff, F. E. Thomasen, K. Lindorff-Larsen, M. Bonomi. Accurate model and ensemble refinement using cryo-electron microscopy maps and Bayesian inference.
+S. E. Hoff, F. E. Thomasen, K. Lindorff-Larsen, M. Bonomi. Accurate model and ensemble refinement using cryo-electron microscopy maps and Bayesian inference.
 bioRxiv 2023 [doi: 10.1101/2023.10.18.562710](https://www.biorxiv.org/content/10.1101/2023.10.18.562710v1). 
 
 This repository is organized in the following two directories:

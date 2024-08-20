@@ -34,7 +34,7 @@ Each step of the procedure will be carried out in a separate directory.
 
    * At this stage we need to download the cryo-EM full map [`emd_13223.map`](https://ftp.ebi.ac.uk/pub/databases/emdb/structures/EMD-13223/map/emd_13223.map.gz).
      the two half-maps [`emd_13223_half_map_1.map`](https://ftp.ebi.ac.uk/pub/databases/emdb/structures/EMD-13223/other/emd_13223_half_map_1.map.gz)
-     and [`emd_13223_half_map_2.map`](https://ftp.ebi.ac.uk/pub/databases/emdb/structures/EMD-13223/other/emd_13223_half_map_1.map.gz),
+     and [`emd_13223_half_map_2.map`](https://ftp.ebi.ac.uk/pub/databases/emdb/structures/EMD-13223/other/emd_13223_half_map_2.map.gz),
      and the PDB [`7P6A.pdb`](https://files.rcsb.org/download/7P6A.pdb), which will be needed to zone the density map close to the model (optional, but speeds up things a lot).
 
    * To convert the input cryo-EM map to PLUMED format, calculate an error map from the two half maps, and optionally filter voxels by correlation, you need to execute this:

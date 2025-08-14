@@ -2,7 +2,7 @@
 These are the steps for refining a single structural model into a cryo-EM maps with EMMIVox.
 Each step of the procedure will be carried out in a separate directory.
 
-**Note**: all the python scripts are contained in [`scripts`](https://github.com/maxbonomi/EMMIVox/tree/main/scripts).
+**Note**: all the python scripts are contained in [`scripts`](../../scripts/).
 
 ## 0. System setup
 
@@ -16,7 +16,7 @@ Each step of the procedure will be carried out in a separate directory.
 
      `bash renumber.sh step3_input.gro step3_input.pdb`
 
-   * Add the following custom groups to the index file created by CHARMM-GUI (`index.ndx`). You can create them with `make_ndx.py` in [`scripts`](https://github.com/maxbonomi/EMMIVox/tree/main/scripts) using [MDAnalysis](https://www.mdanalysis.org) selection syntax:
+   * Add the following custom groups to the index file created by CHARMM-GUI (`index.ndx`). You can create them with `make_ndx.py` in [`scripts`](../../scripts/) using [MDAnalysis](https://www.mdanalysis.org) selection syntax:
 
        * `System-WAT`: the ordered waters (residues 380-455) and a water buffer of 3.5 Ang around them.
           Waters require a special treatment when building the `index.ndx` file, therefore we need to use the flag `--water`:

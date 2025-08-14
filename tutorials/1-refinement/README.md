@@ -2,7 +2,7 @@
 These are the steps for refining a single structural model into a cryo-EM maps with EMMIVox.
 Each step of the procedure will be carried out in a separate directory.
 
-**Note**: all the python scripts are contained in [`scripts`](https://github.com/maxbonomi/EMMIVox/tree/main/scripts).
+**Note**: all the python scripts are contained in [`scripts`](../../scripts/).
 
 ## 0. System setup
 
@@ -18,7 +18,7 @@ Each step of the procedure will be carried out in a separate directory.
 
    * Add to the index file created by CHARMM-GUI (`index.ndx`) two custom groups:
 
-     * `System-MAP`, which contains all the atoms that will be used to generate the cryo-EM map. You can do this with `make_ndx.py` in [`scripts`](https://github.com/maxbonomi/EMMIVox/tree/main/scripts) using [`MDAnalysis`](https://www.mdanalysis.org) selection syntax. Hydrogen atoms and the carboxylate oxygens of glutamic/aspartic acid will be automatically removed from this group, as they are not used in PLUMED to calculate the cryo-EM map. A second group, called `System-MAP-H` will also be created to include these missing atoms (mostly to write them in the trajectory file).
+     * `System-MAP`, which contains all the atoms that will be used to generate the cryo-EM map. You can do this with `make_ndx.py` in [`scripts`](../../scripts/) using [`MDAnalysis`](https://www.mdanalysis.org) selection syntax. Hydrogen atoms and the carboxylate oxygens of glutamic/aspartic acid will be automatically removed from this group, as they are not used in PLUMED to calculate the cryo-EM map. A second group, called `System-MAP-H` will also be created to include these missing atoms (mostly to write them in the trajectory file).
 
         `python make_ndx.py step3_input.gro "protein" System-MAP --ndx index.ndx`
        

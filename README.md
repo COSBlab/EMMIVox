@@ -18,7 +18,7 @@ This repository is organized in the following two directories:
  * MPI library/compilers for multi-replica ensemble simulations.
  * Cuda, needed by both GROMACS and PLUMED. The exact version depends a bit on how old your GPUs are.
  * [LibTorch](https://pytorch.org/get-started/locally/). Make sure you download the C++ version (LibTorch, not pytorch) that is supported by the Cuda version you installed; 
- * Conda to install the python libraries needed by the pre- and post-processing scripts. Have a look [here](https://github.com/maxbonomi/EMMIVox/tree/main/scripts) for more info about the libraries that you need to install.
+ * Conda to install the python libraries needed by the pre- and post-processing scripts. Have a look [here](scripts) for more info about the libraries that you need to install.
  * [Phenix](https://phenix-online.org/documentation/index.html) (any recent version), if you want to validate single-structure refinement. Not really needed for ensemble modelling.
 
 ## **PLUMED installation**
@@ -35,14 +35,14 @@ or downloading the following zip archive:
 
 ### 2. Configuring and compiling PLUMED
  
-Please have a look [here](https://www.plumed.org/doc-master/user-doc/html/_i_s_d_b.html) for detailed instructions about compiling PLUMED with Libtorch support.
+Please have a look [here](https://www.plumed.org/doc-master/user-doc/html/module_isdb/) for detailed instructions about compiling PLUMED with Libtorch support.
 The main point is to enable Libtorch with:
 
 `./configure --enable-libtorch`
 
 ## **GROMACS installation**
 
-Detailed instructions about patching GROMACS with PLUMED, configuration and installation are available [here](https://www.plumed.org/doc-master/user-doc/html/_installation.html).
+Detailed instructions about patching GROMACS with PLUMED, configuration and installation are available [here](https://www.plumed-tutorials.org/lessons/20/001/data/gromacs.html).
 
 ## **Credits and contact**
 

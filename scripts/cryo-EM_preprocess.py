@@ -101,13 +101,15 @@ parser.add_argument('--zone', type=float, default=3.5, metavar='ZONE', help='sel
 parser.add_argument('--zone_PDB', type=str, help='reference PDB for map zoning')
 parser.add_argument('--zone_sel', type=str, help='selection for map zoning')
 parser.add_argument('--double', default=False, action='store_true')
+parser.add_argument('--resolution', type=float, help='Resolution of the input map/PDB in Ångstroms (otherwise take from PDB header).'
+)
 
 args = parser.parse_args()
 
 #### INPUT
 # input MRC file
 MRC_=vars(args)["map"]
-# thresold
+# threshold
 THRES_=vars(args)["threshold"]
 # half side of cubic box to calculate correlation in Angstrom
 # typically 2 Ang
@@ -177,15 +179,22 @@ if(do_zoning):
   # indices for slicing full matrix
   imin = torch.max(torch.floor((xmin-x0)/dx).int(), torch.tensor([0,0,0]).to(torch.int).to(device_))
   imax = torch.min(torch.ceil( (xmax-x0)/dx).int()+1, nbin)
+
   # get resolution
-  parser = PDBParser()
-  structure = parser.get_structure("SYS", ZONE_PDB_)
-  res = structure.header["resolution"]
+  if hasattr(args, "resolution") and args.resolution is not None:
+    res = args.resolution
+  else:
+    parser = PDBParser()
+    structure = parser.get_structure("SYS", ZONE_PDB_)
+    res = structure.header["resolution"]
   # printout
   print("%37s %s" % ("Zoning based on PDB :", ZONE_PDB_))
   print("%37s %s" % ("Zoning atoms selection :", ZONE_SEL_))
   print("%37s %3.1lf" % ("Zoning cutoff [Ang] :", ZONE_CUT_))
-  print("%37s %3.2lf" % ("Resolution [Ang] :", res))
+  if res is not None:
+    print("%37s %3.2lf" % ("Resolution [Ang] :", res))
+  else:
+    print("Resolution [Ang]: not provided")
   print("%37s %d" % ("Number of atoms :", len(pos_g)))
   print("%37s %4.1lf" % ("Mass [kDa] :", mass))
   # indexes of entries above threshold in minibox (tuple of 3 tensors)
